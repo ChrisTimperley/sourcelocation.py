@@ -5,7 +5,7 @@ from glob import glob
 from setuptools import setup, find_packages
 
 MODULE_FILE = \
-    os.path.join(os.path.dirname(__file__), 'src/sourcelocation.py')
+    os.path.join(os.path.dirname(__file__), 'src/sourcelocation/__init__.py')
 VERSION_REGEX = \
     r"__version__\s+=\s+['|\"](.*)['|\"]\s*"
 
