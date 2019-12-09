@@ -1,0 +1,20 @@
+language: python
+services:
+- docker
+python:
+- '3.6'
+install:
+- pip install -r requirements.dev.txt
+- pip install --upgrade .
+script:
+- tox
+notifications:
+  email: false
+deploy:
+- provider: pypi
+  user: ChrisTimperley
+  password:
+    secure: guOFDNLs9aZ2e6fHututV+Bq893IHtIi0YpMLpG88KbINOoOXCR5vMrR+BRE0i3+cKQOZAuHfWlbdfDIt8aYuzzqgC+jnlZwWMAAuUqJu4yUrejYCYJSBVAn/nmZTo42+KXl411jc0dxDGdFkojgFhjV97ZR71CYvBO2lpmeYHTSh0JO9k/YKrt/yb/ZM6jwtmQ0jGNRbMr8KBqm5J/8D09A/XeKmdS6oTJKqAJ2j2bLcH5XhKCL5pxTOFTF3l94P7ZRAT63ruNlPj33UHlkdFlnKbqVLU1BwBLNyVno9FVc81/TZDdREdxjaBBg3YMN8T78yaTwk1ESuULAYiTSS44/T6JJkDxWEG259Awk7cKADiw18raT1dIcT0pBcyRt5WlbJynXSruj1+oct84KyY5+iRiLB8p/Kh9570g/XsiBg/dZ1aof1BTbfX9VgybzwEsLz8GUkJVXifP+kclwFTYNU3zcRgMdx7rMed8EkBQhluo2GgObfw4nMyzzVxNGl2HQRM/NjQUTA/q8RQfpGMnBfMJDr8mwA8Yzb/EpiNH1HFCii3NnlHfw2fV40EeIAFoFkMYW7Z9Ru82t+An+MrMvRjScFRCaXQ5AjbgamlnH3iaE3Hqn+F9Gp7qFh+XpDVwhZbyRbzvc8Zd0LtZXRdXDskEH+HXESKnKYG4ROfA=
+  on:
+    tags: true
+    python: '3.6'
