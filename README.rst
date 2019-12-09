@@ -1,7 +1,7 @@
 .. -*-restructuredtext-*-
 
-fluffycow
-=========
+sourcelocation
+==============
 
 .. image:: https://travis-ci.org/ChrisTimperley/sourcelocation.py.svg?branch=master
     :target: https://travis-ci.org/ChrisTimperley/sourcelocation.py
