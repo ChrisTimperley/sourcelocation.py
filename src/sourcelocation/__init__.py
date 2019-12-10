@@ -7,6 +7,7 @@ __all__ = (
     '__version__',
     'FileLine',
     'FileLineMap',
+    'FileLineSet',
     'Location',
     'FileLocation'
 )
@@ -15,7 +16,7 @@ __version__ = '0.0.1'
 import typing as _t
 import attr as _attr
 
-from .fileline import FileLine, FileLineMap
+from .fileline import FileLine, FileLineMap, FileLineSet
 
 
 @_attr.s(frozen=True, str=False, auto_attribs=True)
