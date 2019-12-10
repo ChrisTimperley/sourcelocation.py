@@ -11,10 +11,11 @@ __all__ = (
     'Location',
     'LocationRange',
     'FileLocation',
-    'FileLocationRange'
+    'FileLocationRange',
+    'FileLocationRangeSet'
 )
-__version__ = '1.0.1'
+__version__ = '1.0.2'
 
 from .fileline import FileLine, FileLineMap, FileLineSet
 from .location import (Location, LocationRange,
-                       FileLocation, FileLocationRange)
+                       FileLocation, FileLocationRange, FileLocationRangeSet)

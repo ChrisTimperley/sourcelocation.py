@@ -3,7 +3,8 @@ __all__ = (
     'Location',
     'LocationRange',
     'FileLocation',
-    'FileLocationRange'
+    'FileLocationRange',
+    'FileLocationRangeSet'
 )
 
 import typing as _t
@@ -129,3 +130,34 @@ class FileLocationRange:
         in_file = floc.filename == self.filename
         in_range = floc.location in self.location_range
         return in_file and in_range
+
+
+class FileLocationRangeSet:
+    """An immutable set that is comprised of zero or more nonempty,
+    disconnected file location ranges.
+
+    Based on the RangeSet class in Guava.
+    """
+    def __init__(self,
+                 contents: _t.Optional[_t.Iterable[FileLocationRange]] = None
+                 ) -> None:
+        self._filename_to_ranges: _t.Dict[str, _t.Set[FileLocationRange]] = {}
+        if not contents:
+            contents = []
+        for range_ in contents:
+            filename = range_.filename
+            if filename not in self._filename_to_ranges:
+                self._filename_to_ranges[filename] = set()
+            self._filename_to_ranges[filename].add(range_)
+
+    def __iter__(self) -> _t.Iterator[FileLocationRange]:
+        for ranges in self._filename_to_ranges.values():
+            yield from ranges
+
+    def __repr__(self) -> str:
+        return f'FileLocationRangeSet({self._filename_to_ranges})'
+
+    def contains(self, location: FileLocation) -> bool:
+        """Determines whether a given location is contained within this set."""
+        ranges = self._filename_to_ranges.get(location.filename, set())
+        return any(location in r for r in ranges)
