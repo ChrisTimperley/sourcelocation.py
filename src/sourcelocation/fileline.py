@@ -40,31 +40,39 @@ class FileLineMap(BaseMap):
     Note that operations on instances of this class are NOT thread safe.
     """
     def __init__(self, contents: _t.Mapping[FileLine, T]) -> None:
-        self.__contents: _t.Dict[str, _t.Dict[int, T]] = {}
-        self.__length = 0
+        self._contents: _t.Dict[str, _t.Dict[int, T]] = {}
+        self._length = 0
         for line, val in contents.items():
             self[line] = val
 
+    def __hash__(self) -> int:
+        return hash(self._contents)
+
+    def __eq__(self, other: _t.Any) -> bool:
+        if not isinstance(other, FileLineMap):
+            return False
+        return self._contents == other._contents
+
     def __iter__(self) -> _t.Iterator[FileLine]:
-        for filename in self.__contents:
-            for line_number in self.__contents[filename]:
+        for filename in self._contents:
+            for line_number in self._contents[filename]:
                 yield FileLine(filename, line_number)
 
     def __len__(self) -> int:
-        return self.__length
+        return self._length
 
     def __getitem__(self, line: FileLine) -> T:
-        return self.__contents[line.filename][line.num]
+        return self._contents[line.filename][line.num]
 
     def __setitem__(self, line: FileLine, val: T) -> None:
-        if line.filename not in self.__contents:
-            self.__contents[line.filename] = {}
-        if line.num not in self.__contents[line.filename]:
-            self.__length += 1
-        self.__contents[line.filename][line.num] = val
+        if line.filename not in self._contents:
+            self._contents[line.filename] = {}
+        if line.num not in self._contents[line.filename]:
+            self._length += 1
+        self._contents[line.filename][line.num] = val
 
     def __delitem__(self, line: FileLine) -> None:
-        del self.__contents[line.filename][line.num]
-        if not self.__contents[line.filename]:
-            del self.__contents[line.filename]
-        self.__length -= 1
+        del self._contents[line.filename][line.num]
+        if not self._contents[line.filename]:
+            del self._contents[line.filename]
+        self._length -= 1
