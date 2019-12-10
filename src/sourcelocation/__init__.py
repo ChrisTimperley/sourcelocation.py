@@ -6,6 +6,7 @@ code locations (e.g., characters, character ranges, lines, etc.).
 __all__ = (
     '__version__',
     'FileLine',
+    'FileLineMap',
     'Location',
     'FileLocation'
 )
@@ -14,7 +15,7 @@ __version__ = '0.0.1'
 import typing as _t
 import attr as _attr
 
-from .fileline import FileLine
+from .fileline import FileLine, FileLineMap
 
 
 @_attr.s(frozen=True, str=False, auto_attribs=True)

@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 __all__ = (
     'FileLine',
+    'FileLineMap',
 )
 
 import attr as _attr
