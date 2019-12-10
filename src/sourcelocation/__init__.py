@@ -11,7 +11,7 @@ __all__ = (
     'Location',
     'FileLocation'
 )
-__version__ = '0.0.1'
+__version__ = '1.0.0'
 
 from .fileline import FileLine, FileLineMap, FileLineSet
 from .location import Location, FileLocation
