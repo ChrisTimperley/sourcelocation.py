@@ -2,7 +2,8 @@
 __all__ = (
     'Location',
     'LocationRange',
-    'FileLocation'
+    'FileLocation',
+    'FileLocationRange'
 )
 
 import typing as _t
@@ -96,3 +97,35 @@ class LocationRange:
         right = loc.line < self.stop.line \
             or (loc.line == self.stop.line and loc.column < self.stop.column)
         return left and right
+
+
+@_attr.s(frozen=True, str=False, auto_attribs=True)
+class FileLocationRange:
+    """Represents a contiguous sequence of characters in a particular file."""
+    filename: str
+    location_range: LocationRange
+
+    @staticmethod
+    def from_string(s: str) -> 'FileLocationRange':
+        filename, _, s_range = s.rpartition('@')
+        location_range = LocationRange.from_string(s_range)
+        return FileLocationRange(filename, location_range)
+
+    @property
+    def start(self) -> Location:
+        """The start of this location range."""
+        return self.location_range.start
+
+    @property
+    def stop(self) -> Location:
+        """The end of this location range."""
+        return self.location_range.stop
+
+    def __str__(self) -> str:
+        return f'{self.filename}@{str(self.location_range)}'
+
+    def __contains__(self, floc: FileLocation) -> bool:
+        """Determines whether a given location is within this range."""
+        in_file = floc.filename == self.filename
+        in_range = floc.location in self.location_range
+        return in_file and in_range
