@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 __all__ = (
     'Location',
+    'LocationRange',
     'FileLocation'
 )
 
@@ -70,3 +71,28 @@ class FileLocation:
 
     def __str__(self) -> str:
         return f'{self.filename}@{str(self.location)}'
+
+
+@_attr.s(frozen=True, str=False, auto_attribs=True)
+class LocationRange:
+    """Captures a contiguous, non-inclusive range of locations."""
+    start: Location
+    stop: Location
+
+    @staticmethod
+    def from_string(s: str) -> 'LocationRange':
+        start_s, _, stop_s = s.partition('::')
+        start = Location.from_string(start_s)
+        stop = Location.from_string(stop_s)
+        return LocationRange(start, stop)
+
+    def __str__(self) -> str:
+        return f'{str(self.start)}::{str(self.stop)}'
+
+    def __contains__(self, loc: Location) -> bool:
+        """Determines whether a given location is within this range."""
+        left = loc.line > self.start.line \
+            or (loc.line == self.start.line and loc.column >= self.start.column)  # noqa
+        right = loc.line < self.stop.line \
+            or (loc.line == self.stop.line and loc.column < self.stop.column)
+        return left and right
