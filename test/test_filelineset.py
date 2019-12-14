@@ -26,3 +26,11 @@ def test_equals():
     assert set_y == set_x
     assert set_x != set_z
     assert set_y != set_z
+
+
+def test_contains():
+    set_ = contiguous_line_set(1, 6)
+    assert ln(1) in set_
+    assert ln(5) in set_
+    assert ln(0) not in set_
+    assert ln(6) not in set_
