@@ -4,7 +4,7 @@ import pytest
 from sourcelocation import FileLine
 
 
-def test_fileline_equals():
+def test_equals():
     x = FileLine('foo.c', 1)
     y = FileLine('foo.c', 2)
     assert x != y
