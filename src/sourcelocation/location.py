@@ -77,7 +77,7 @@ class FileLocation:
 
 @_attr.s(frozen=True, str=False, auto_attribs=True)
 class LocationRange:
-    """Captures a contiguous, non-inclusive range of locations."""
+    """Captures a contiguous, inclusive range of locations."""
     start: Location
     stop: Location
 
@@ -96,7 +96,7 @@ class LocationRange:
         left = loc.line > self.start.line \
             or (loc.line == self.start.line and loc.column >= self.start.column)  # noqa
         right = loc.line < self.stop.line \
-            or (loc.line == self.stop.line and loc.column < self.stop.column)
+            or (loc.line == self.stop.line and loc.column <= self.stop.column)
         return left and right
 
 
