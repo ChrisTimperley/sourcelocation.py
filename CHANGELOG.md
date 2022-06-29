@@ -1,3 +1,13 @@
+## 1.0.4 (2022-06-29)
+
+* Added py.typed to support checking of type annotations
+
+
+## 1.0.3 (2022-06-29)
+
+* Relaxed attrs dependency requirements
+
+
 ## 1.0.2 (2019-12-10)
 
 ### Features
