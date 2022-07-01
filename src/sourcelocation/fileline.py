@@ -166,7 +166,7 @@ class FileLineSet(BaseSet):
         """
         return FileLineSet.from_iter(filter(predicate, self))
 
-    def union(self, *others: _t.Iterable[FileLine]) -> _t.Set[FileLine]:
+    def union(self, *others: _t.Iterable[FileLine]) -> "FileLineSet":
         """
         Returns a set that contains the union of the file lines contained
         within this set and the given collections of file lines.
@@ -174,7 +174,7 @@ class FileLineSet(BaseSet):
         sources: _t.Tuple[_t.Iterable[FileLine], ...] = (self,) + others
         return FileLineSet.from_iter(l for src in sources for l in src)
 
-    def intersection(self, *others: _t.Iterable[FileLine]) -> _t.Set[FileLine]:
+    def intersection(self, *others: _t.Iterable[FileLine]) -> "FileLineSet":
         """
         Returns a set of file lines that contains the intersection of the lines
         within this set and a given set.
