@@ -1,3 +1,8 @@
+## 1.0.5 (2022-08-09)
+
+* Updated FileLineSet.to_dict to return line numbers in ascending order
+
+
 ## 1.0.4 (2022-06-29)
 
 * Added py.typed to support checking of type annotations

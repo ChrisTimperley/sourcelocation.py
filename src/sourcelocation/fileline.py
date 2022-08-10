@@ -205,5 +205,7 @@ class FileLineSet(BaseSet):
         return list(self._contents.keys())
 
     def to_dict(self) -> _t.Dict[str, _t.List[int]]:
-        return {fn: list(lines)
-                for (fn, lines) in self._contents.items()}
+        return {
+            filename: list(sorted(lines))
+            for (filename, lines) in self._contents.items()
+        }
