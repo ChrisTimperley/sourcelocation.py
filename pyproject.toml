@@ -1,0 +1,73 @@
+[tool.poetry]
+name = "sourcelocation"
+version = "1.1.5"
+description = "Simple data structures for representing source code locations"
+authors = ["Christopher Timperley <christimperley@googlemail.com>"]
+readme = "README.rst"
+license = "MIT"
+repository = "https://github.com/ChrisTimperley/sourcelocation.py"
+keywords = ["data structure", "source code", "program", "analysis"]
+classifiers = [
+  "Natural Language :: English",
+  "Intended Audience :: Developers",
+  "Programming Language :: Python",
+  "Programming Language :: Python :: 3",
+  "Programming Language :: Python :: 3.9",
+  "Programming Language :: Python :: 3.10",
+  "Programming Language :: Python :: 3.11",
+  "Programming Language :: Python :: 3.12",
+
+]
+
+[tool.poetry.dependencies]
+python = ">= 3.9"
+
+[tool.poetry.group.dev.dependencies]
+mypy = "^1.7.0"
+pytest = "^7.4.3"
+pytest-cov = "^4.1.0"
+ruff = "^0.1.6"
+nox = "^2023.4.22"
+
+[tool.mypy]
+ignore_missing_imports = false
+strict = true
+
+[tool.ruff]
+line-length = 120
+target-version = "py312"
+src = ["src"]
+select = [
+    "ALL",  # includes all rules (including new ones)
+]
+extend-ignore = [
+    "ANN101",   # missing type annotation for 'self' in method
+    "ANN102",   # missing type annotation for 'cls' in classmethod
+    "ANN401",   # dynamically typed expressions (typing.Any) are disallowed
+    "B024",     # use of abstract base class without abstract methods
+    "D100",     # missing docstring in public module
+    "D101",     # missing docstring in public class
+    "D102",     # missing docstring in public method
+    "D103",     # missing docstring in public function
+    "D104",     # missing docstring in public package
+    "D105",     # missing docstring in magic method
+    "D107",     # missing docstring in `__init__`
+    "D203",     # one-blank-line-before-class
+    "D204",     # 1 blank line required after class docstring
+    "D205",     # 1 blank line required between summary line and description
+    "D213",     # multi-line-summary-second-line
+    "D401",     # first line of docstring should be in imperative mood
+    "FIX001",   # unresolved FIXME
+    "FIX002",   # TODO found
+    "S101",     # use of assertions
+    "T201",     # use of print
+    "TD001",    # invalid TODO tag: `FIXME`
+    "TD002",    # missing author in TODO
+    "TD003",    # missing issue link on line following TODO
+    "TD004",    # missing colon in TODO
+    "TRY003",   # avoid specifying long messages outside the exception class
+]
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
