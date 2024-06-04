@@ -1,3 +1,5 @@
+from __future__ import annotations
+
 __all__ = (
     "FileLine",
     "FileLineMap",
@@ -17,7 +19,7 @@ class FileLine:
     num: int
 
     @staticmethod
-    def from_string(s: str) -> "FileLine":
+    def from_string(s: str) -> FileLine:
         fn, _, s_num = s.rpartition(":")
         num = int(s_num)
         return FileLine(fn, num)
@@ -74,17 +76,17 @@ class FileLineSet(_t.AbstractSet[FileLine]):
     """A set of file lines."""
 
     @staticmethod
-    def from_dict(d: dict[str, _t.Iterable[int]]) -> "FileLineSet":
+    def from_dict(d: dict[str, _t.Iterable[int]]) -> FileLineSet:
         contents = {fn: set(lines) for (fn, lines) in d.items()}
         return FileLineSet(contents)
 
     @staticmethod
-    def from_list(lst: list[FileLine]) -> "FileLineSet":
+    def from_list(lst: list[FileLine]) -> FileLineSet:
         """Converts a list of file lines into a FileLineSet."""
         return FileLineSet.from_iter(lst)
 
     @staticmethod
-    def from_iter(itr: _t.Iterable[FileLine]) -> "FileLineSet":
+    def from_iter(itr: _t.Iterable[FileLine]) -> FileLineSet:
         d: dict[str, set[int]] = {}
         for line in itr:
             if line.filename not in d:
@@ -150,21 +152,21 @@ class FileLineSet(_t.AbstractSet[FileLine]):
 
     def filter(
         self,
-        predicate: _t.Callable[[FileLine], "FileLineSet"],
-    ) -> "FileLineSet":
+        predicate: _t.Callable[[FileLine], FileLineSet],
+    ) -> FileLineSet:
         """Returns a subset of the file lines within this set that satisfy a given
         filtering criterion.
         """
         return FileLineSet.from_iter(filter(predicate, self))
 
-    def union(self, *others: _t.Iterable[FileLine]) -> "FileLineSet":
+    def union(self, *others: _t.Iterable[FileLine]) -> FileLineSet:
         """Returns a set that contains the union of the file lines contained
         within this set and the given collections of file lines.
         """
         sources: tuple[_t.Iterable[FileLine], ...] = (self, *others)
         return FileLineSet.from_iter(line for src in sources for line in src)
 
-    def intersection(self, *others: _t.Iterable[FileLine]) -> "FileLineSet":
+    def intersection(self, *others: _t.Iterable[FileLine]) -> FileLineSet:
         """Returns a set of file lines that contains the intersection of the lines
         within this set and a given set.
         """
@@ -173,7 +175,7 @@ class FileLineSet(_t.AbstractSet[FileLine]):
             lines &= set(src)
         return FileLineSet.from_iter(lines)
 
-    def restricted_to_files(self, filenames: list[str]) -> "FileLineSet":
+    def restricted_to_files(self, filenames: list[str]) -> FileLineSet:
         """Returns a variant of this set that only contains lines that occur in any one of the given files."""
         restricted: dict[str, set[int]] = {}
         for filename in filenames:
