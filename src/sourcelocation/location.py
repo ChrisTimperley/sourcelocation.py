@@ -1,3 +1,5 @@
+from __future__ import annotations
+
 __all__ = (
     "Location",
     "LocationRange",
@@ -27,16 +29,19 @@ class Location:
     column: int
 
     @staticmethod
-    def from_string(s: str) -> "Location":
+    def from_string(s: str) -> Location:
         line, _, column = s.partition(":")
         return Location(int(line), int(column))
 
-    def __le__(self, other: _t.Any) -> bool:
+    def __lt__(self, other: _t.Any) -> bool:
         if not isinstance(other, Location):
             return False
         if self.line == other.line:
             return self.column < other.column
         return self.line < other.line
+
+    def __le__(self, other: _t.Any) -> bool:
+        return self == other or self.__lt__(other)
 
     def __str__(self) -> str:
         return f"{self.line}:{self.column}"
@@ -58,6 +63,18 @@ class FileLocation:
     filename: str
     location: Location
 
+    def __lt__(self, other: _t.Any) -> bool:
+        if not isinstance(other, FileLocation):
+            return False
+        if self.filename < other.filename:
+            return True
+        if self.filename > other.filename:
+            return False
+        return self.location < other.location
+
+    def __le__(self, other: _t.Any) -> bool:
+        return self == other or self.__lt__(other)
+
     @property
     def line(self) -> int:
         """The one-indexed line number for this location."""
@@ -69,7 +86,7 @@ class FileLocation:
         return self.location.column
 
     @staticmethod
-    def from_string(s: str) -> "FileLocation":
+    def from_string(s: str) -> FileLocation:
         filename, _, location_string = s.rpartition("@")
         location = Location.from_string(location_string)
         return FileLocation(filename, location)
@@ -86,11 +103,23 @@ class LocationRange:
     stop: Location
 
     @staticmethod
-    def from_string(s: str) -> "LocationRange":
+    def from_string(s: str) -> LocationRange:
         start_s, _, stop_s = s.partition("::")
         start = Location.from_string(start_s)
         stop = Location.from_string(stop_s)
         return LocationRange(start, stop)
+
+    def __lt__(self, other: _t.Any) -> bool:
+        if not isinstance(other, LocationRange):
+            return False
+        if self.start < other.start:
+            return True
+        if self.start > other.start:
+            return False
+        return self.stop < other.stop
+
+    def __le__(self, other: _t.Any) -> bool:
+        return self == other or self.__lt__(other)
 
     def __str__(self) -> str:
         return f"{self.start!s}::{self.stop!s}"
@@ -112,7 +141,7 @@ class FileLocationRange:
     location_range: LocationRange
 
     @staticmethod
-    def from_string(s: str) -> "FileLocationRange":
+    def from_string(s: str) -> FileLocationRange:
         filename, _, s_range = s.rpartition("@")
         location_range = LocationRange.from_string(s_range)
         return FileLocationRange(filename, location_range)
@@ -126,6 +155,18 @@ class FileLocationRange:
     def stop(self) -> Location:
         """The end of this location range."""
         return self.location_range.stop
+
+    def __lt__(self, other: _t.Any) -> bool:
+        if not isinstance(other, FileLocationRange):
+            return False
+        if self.filename < other.filename:
+            return True
+        if self.filename > other.filename:
+            return False
+        return self.location_range < other.location_range
+
+    def __le__(self, other: _t.Any) -> bool:
+        return self == other or self.__lt__(other)
 
     def __str__(self) -> str:
         return f"{self.filename}@{self.location_range!s}"

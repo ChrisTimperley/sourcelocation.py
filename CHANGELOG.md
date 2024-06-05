@@ -1,3 +1,7 @@
+## 1.1.6 (2024-06-04)
+
+* added `__lt__` and `__le__` to FileLine, Location, LocationRange, FileLocation, and FileLocationRange
+
 ## 1.1.5 (2024-05-31)
 
 * updated to require Python 3.9 or greater

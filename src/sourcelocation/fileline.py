@@ -27,6 +27,16 @@ class FileLine:
     def __str__(self) -> str:
         return f"{self.filename}:{self.num}"
 
+    def __lt__(self, other: _t.Any) -> bool:
+        if not isinstance(other, FileLine):
+            return False
+        if self.filename == other.filename:
+            return self.num < other.num
+        return self.filename < other.filename
+
+    def __le__(self, other: _t.Any) -> bool:
+        return self == other or self.__lt__(other)
+
 
 class FileLineMap(_t.MutableMapping[FileLine, T]):
     """An efficient implementation of maps indexed by file lines.
