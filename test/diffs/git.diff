@@ -1,0 +1,21 @@
+diff --git a/file-two.txt b/file-two.txt
+new file mode 100644
+index 0000000..2990e5b
+--- /dev/null
++++ b/file-two.txt
+@@ -0,0 +1,2 @@
++This is file two.
++How do you do?
+diff --git a/testfile.c b/testfile.c
+index f50a1fc..60ed6ff 100644
+--- a/testfile.c
++++ b/testfile.c
+@@ -6,6 +6,8 @@
+ int testfun(int a, int b)
+   x = a + b;
+   x *= x;
+
++  int z = 10000;
++
+   int y;
+   y = x * 2;

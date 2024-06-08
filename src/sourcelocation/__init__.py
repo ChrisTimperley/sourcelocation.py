@@ -4,6 +4,8 @@ Implements data structures to represent, e.g., characters, character ranges, lin
 """
 __all__ = (
     "__version__",
+    "Diff",
+    "FileDiff",
     "FileLine",
     "FileLineMap",
     "FileLineSet",
@@ -13,7 +15,21 @@ __all__ = (
     "FileLocationRange",
     "FileLocationRangeSet",
 )
-__version__ = "1.1.5"
+__version__ = "1.1.7"
 
-from .fileline import FileLine, FileLineMap, FileLineSet
-from .location import FileLocation, FileLocationRange, FileLocationRangeSet, Location, LocationRange
+from sourcelocation.diff import (
+    Diff,
+    FileDiff,
+)
+from sourcelocation.fileline import (
+    FileLine,
+    FileLineMap,
+    FileLineSet,
+)
+from sourcelocation.location import (
+    FileLocation,
+    FileLocationRange,
+    FileLocationRangeSet,
+    Location,
+    LocationRange,
+)
