@@ -1,3 +1,7 @@
+## 1.1.7 (2024-06-05)
+
+* added `Diff` and `FileDiff` data structures
+
 ## 1.1.6 (2024-06-04)
 
 * added `__lt__` and `__le__` to FileLine, Location, LocationRange, FileLocation, and FileLocationRange
