@@ -10,6 +10,9 @@ lint:
 	poetry run mypy src
 	poetry run ruff src
 
+publish:
+	poetry publish --build
+
 check: lint test
 
 .PHONY: check install lint test
