@@ -3,9 +3,6 @@
 sourcelocation
 ==============
 
-.. image:: https://travis-ci.org/ChrisTimperley/sourcelocation.py.svg?branch=master
-    :target: https://travis-ci.org/ChrisTimperley/sourcelocation.py
-
 .. image:: https://badge.fury.io/py/sourcelocation.svg
     :target: https://badge.fury.io/py/sourcelocation
 
