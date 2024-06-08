@@ -15,4 +15,4 @@ publish:
 
 check: lint test
 
-.PHONY: check install lint test
+.PHONY: check install lint publish test
