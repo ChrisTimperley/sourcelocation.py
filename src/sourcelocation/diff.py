@@ -1,8 +1,14 @@
 from __future__ import annotations
 
 __all__ = (
+    "ContextLine",
+    "DeletedLine",
     "Diff",
     "FileDiff",
+    "FileHunk",
+    "Hunk",
+    "HunkLine",
+    "InsertedLine",
 )
 
 import abc
@@ -125,6 +131,13 @@ class Hunk:
 
 
 @dataclass(frozen=True)
+class FileHunk:
+    old_filename: str
+    new_filename: str
+    hunk: Hunk
+
+
+@dataclass(frozen=True)
 class FileDiff:
     """Represents a set of changes to a single text-based file."""
     old_filename: str
@@ -162,6 +175,15 @@ class FileDiff:
             hunks=hunks,
         )
 
+    @property
+    def file_hunks(self) -> t.Iterator[FileHunk]:
+        for hunk in self.hunks:
+            yield FileHunk(
+                old_filename=self.old_filename,
+                new_filename=self.new_filename,
+                hunk=hunk,
+            )
+
     def __str__(self) -> str:
         """Returns a string encoding of this file diff in the unified diff format."""
         old_filename_line = f"--- {self.old_filename}"
@@ -175,6 +197,30 @@ class FileDiff:
 class Diff:
     """Represents a set of changes to one-or-more text-based files."""
     file_diffs: t.Sequence[FileDiff]
+
+    @classmethod
+    def from_file_hunks(cls, file_hunks: list[FileHunk]) -> Diff:
+        """Constructs a Diff from a list of FileHunks."""
+        # group by file
+        old_and_new_filename_to_hunks: dict[tuple[str, str], list[Hunk]] = {}
+        for file_hunk in file_hunks:
+            key = (file_hunk.old_filename, file_hunk.new_filename)
+            if key not in old_and_new_filename_to_hunks:
+                old_and_new_filename_to_hunks[key] = []
+            old_and_new_filename_to_hunks[key].append(file_hunk.hunk)
+
+        # transform each group into a FileDiff
+        file_diffs: list[FileDiff] = []
+        for (old_filename, new_filename) in old_and_new_filename_to_hunks:
+            hunks = old_and_new_filename_to_hunks[(old_filename, new_filename)]
+            file_diff = FileDiff(
+                old_filename=old_filename,
+                new_filename=new_filename,
+                hunks=hunks,
+            )
+            file_diffs.append(file_diff)
+
+        return Diff(file_diffs)
 
     @classmethod
     def from_unidiff(cls, diff: str) -> Diff:
@@ -195,6 +241,11 @@ class Diff:
     def files(self) -> list[str]:
         """Returns a list of the names of the files that are changed by this diff."""
         return [fp.old_filename for fp in self.file_diffs]
+
+    @property
+    def file_hunks(self) -> t.Iterator[FileHunk]:
+        for file_diff in self.file_diffs:
+            yield from file_diff.file_hunks
 
     def __str__(self) -> str:
         """Returns the contents of this diff as a unified format diff."""

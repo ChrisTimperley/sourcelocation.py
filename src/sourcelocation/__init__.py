@@ -6,20 +6,24 @@ __all__ = (
     "__version__",
     "Diff",
     "FileDiff",
+    "FileHunk",
     "FileLine",
     "FileLineMap",
     "FileLineSet",
+    "Hunk",
     "Location",
     "LocationRange",
     "FileLocation",
     "FileLocationRange",
     "FileLocationRangeSet",
 )
-__version__ = "1.1.7"
+__version__ = "1.1.8"
 
 from sourcelocation.diff import (
     Diff,
     FileDiff,
+    FileHunk,
+    Hunk,
 )
 from sourcelocation.fileline import (
     FileLine,
