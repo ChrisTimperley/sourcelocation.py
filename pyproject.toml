@@ -40,6 +40,7 @@ select = [
     "ALL",  # includes all rules (including new ones)
 ]
 extend-ignore = [
+    "PTH117",   # use Pathlib instead of os.path
     "ANN101",   # missing type annotation for 'self' in method
     "ANN102",   # missing type annotation for 'cls' in classmethod
     "ANN401",   # dynamically typed expressions (typing.Any) are disallowed

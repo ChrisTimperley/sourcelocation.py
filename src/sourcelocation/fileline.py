@@ -6,6 +6,7 @@ __all__ = (
     "FileLineSet",
 )
 
+import os
 import typing as _t
 from dataclasses import dataclass
 
@@ -23,6 +24,12 @@ class FileLine:
         fn, _, s_num = s.rpartition(":")
         num = int(s_num)
         return FileLine(fn, num)
+
+    def with_relative_location(self, base: str) -> FileLine:
+        filename = self.filename
+        if os.path.isabs(filename):
+            filename = os.path.relpath(filename, base)
+        return FileLine(filename, self.num)
 
     def __str__(self) -> str:
         return f"{self.filename}:{self.num}"
@@ -48,6 +55,13 @@ class FileLineMap(_t.MutableMapping[FileLine, T]):
         self._length = 0
         for line, val in contents.items():
             self[line] = val
+
+    def with_relative_locations(self, base: str) -> FileLineMap[T]:
+        new_contents: dict[FileLine, T] = {}
+        for line, val in self.items():
+            new_line = line.with_relative_location(base)
+            new_contents[new_line] = val
+        return FileLineMap(new_contents)
 
     def __hash__(self) -> int:
         return hash(self._contents)
@@ -103,6 +117,12 @@ class FileLineSet(_t.AbstractSet[FileLine]):
                 d[line.filename] = set()
             d[line.filename].add(line.num)
         return FileLineSet(d)
+
+    def with_relative_locations(self, base: str) -> FileLineSet:
+        """Creates a new instance with relative file locations."""
+        return FileLineSet.from_iter(
+            line.with_relative_location(base) for line in self
+        )
 
     def __init__(
         self,

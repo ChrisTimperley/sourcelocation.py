@@ -8,6 +8,7 @@ __all__ = (
     "FileLocationRangeSet",
 )
 
+import os
 import typing as _t
 from dataclasses import dataclass
 
@@ -62,6 +63,16 @@ class FileLocation:
 
     filename: str
     location: Location
+
+    def with_relative_location(self, base: str) -> FileLocation:
+        """Creates a new instance with a relative file location."""
+        filename = self.filename
+        if os.path.isabs(filename):
+            filename = os.path.relpath(filename, base)
+        return FileLocation(
+            filename,
+            self.location,
+        )
 
     def __lt__(self, other: _t.Any) -> bool:
         if not isinstance(other, FileLocation):
@@ -146,6 +157,16 @@ class FileLocationRange:
         location_range = LocationRange.from_string(s_range)
         return FileLocationRange(filename, location_range)
 
+    def with_relative_location(self, base: str) -> FileLocationRange:
+        """Creates a new instance with a relative file location."""
+        filename = self.filename
+        if os.path.isabs(filename):
+            filename = os.path.relpath(filename, base)
+        return FileLocationRange(
+            filename,
+            self.location_range,
+        )
+
     @property
     def start(self) -> Location:
         """The start of this location range."""
@@ -204,6 +225,13 @@ class FileLocationRangeSet:
 
     def __repr__(self) -> str:
         return f"FileLocationRangeSet({self._filename_to_ranges})"
+
+    def with_relative_locations(self, base: str) -> FileLocationRangeSet:
+        """Creates a new instance with relative file locations."""
+        return FileLocationRangeSet(
+            range_.with_relative_location(base)
+            for range_ in self
+        )
 
     def contains(self, location: FileLocation) -> bool:
         """Determines whether a given location is contained within this set."""
