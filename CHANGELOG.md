@@ -1,4 +1,4 @@
-## 1.1.8 (XXXX-XX-XX)
+## 1.1.8 (2024-07-01)
 
 * added `FileHunk` data structure and ability to build `Diff` from `FileHunk`s
 * added `with_relative_location` and `with_relative_locations` to all data structures
