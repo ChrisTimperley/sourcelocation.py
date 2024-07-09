@@ -1,3 +1,8 @@
+## 1.1.9 (XXXX-XX-XX)
+
+* added `strip` to `Diff` and `FileDiff`
+
+
 ## 1.1.8 (2024-07-01)
 
 * added `FileHunk` data structure and ability to build `Diff` from `FileHunk`s

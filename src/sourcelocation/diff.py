@@ -184,6 +184,21 @@ class FileDiff:
                 hunk=hunk,
             )
 
+    def strip(self, num_components: int) -> FileDiff:
+        """Removes the first `num_components` components from the path of this file."""
+        assert num_components >= 0
+        if num_components == 0:
+            return self
+
+        old_filename = "/".join(self.old_filename.split("/")[num_components:])
+        new_filename = "/".join(self.new_filename.split("/")[num_components:])
+
+        return FileDiff(
+            old_filename=old_filename,
+            new_filename=new_filename,
+            hunks=self.hunks,
+        )
+
     def __str__(self) -> str:
         """Returns a string encoding of this file diff in the unified diff format."""
         old_filename_line = f"--- {self.old_filename}"
@@ -246,6 +261,15 @@ class Diff:
     def file_hunks(self) -> t.Iterator[FileHunk]:
         for file_diff in self.file_diffs:
             yield from file_diff.file_hunks
+
+    def strip(self, num_components: int) -> Diff:
+        """Removes the first `num_components` components from the path of each file in this diff."""
+        assert num_components >= 0
+        if num_components == 0:
+            return self
+        return Diff([
+            file_diff.strip(num_components) for file_diff in self.file_diffs
+        ])
 
     def __str__(self) -> str:
         """Returns the contents of this diff as a unified format diff."""
