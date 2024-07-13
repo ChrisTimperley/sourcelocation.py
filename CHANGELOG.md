@@ -1,7 +1,7 @@
 ## 1.1.9 (XXXX-XX-XX)
 
 * added `strip` to `Diff` and `FileDiff`
-
+* added `union` and `__len__` to `FileLocationRangeSet`
 
 ## 1.1.8 (2024-07-01)
 

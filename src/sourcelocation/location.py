@@ -8,6 +8,7 @@ __all__ = (
     "FileLocationRangeSet",
 )
 
+import itertools
 import os
 import typing as _t
 from dataclasses import dataclass
@@ -199,7 +200,7 @@ class FileLocationRange:
         return in_file and in_range
 
 
-class FileLocationRangeSet:
+class FileLocationRangeSet(_t.Iterable[FileLocationRange]):
     """An immutable set that is comprised of zero or more nonempty,
     disconnected file location ranges.
 
@@ -225,6 +226,15 @@ class FileLocationRangeSet:
 
     def __repr__(self) -> str:
         return f"FileLocationRangeSet({self._filename_to_ranges})"
+
+    def __len__(self) -> int:
+        return sum(len(ranges) for ranges in self._filename_to_ranges.values())
+
+    def union(self, *others: _t.Iterable[FileLocationRange]) -> FileLocationRangeSet:
+        """Returns a set that contains the union of the file location ranges contained
+        within this set and the given collections of file location ranges.
+        """
+        return FileLocationRangeSet(itertools.chain(self, *others))
 
     def with_relative_locations(self, base: str) -> FileLocationRangeSet:
         """Creates a new instance with relative file locations."""
